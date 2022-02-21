@@ -1,0 +1,4 @@
+# Deploy Full Infrastructure - Include here all playbooks that want to be deployed
+---
+- import_playbook: dev_tenant.yaml
+- import_playbook: dev_app1.yaml
