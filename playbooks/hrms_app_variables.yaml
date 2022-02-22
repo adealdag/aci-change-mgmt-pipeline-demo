@@ -1,0 +1,124 @@
+tenant_name: prod
+vrf_name: main_vrf
+l3out_name: shared_l3out
+
+bridge_domains:
+  - name: 192.168.21.0_24_bd
+    mode: L3
+    gateway: 192.168.21.1/24
+    scope: [public, shared]
+  - name: 192.168.22.0_24_bd
+    mode: L3
+    gateway: 192.168.22.1/24
+    scope: [public, shared]
+  - name: 192.168.23.0_24_bd
+    mode: L3
+    gateway: 192.168.23.1/24
+    scope: [public, shared]
+
+app_name: hrms_app
+epgs:
+  - name: hrms_fe_epg
+    bd: 192.168.21.0_24_bd
+    prefGroup: no
+    contracts:
+      - contract: external_to_web_con
+        type: consumer
+      - contract: external_to_web_con
+        type: provider
+      - contract: web_to_app_con
+        type: consumer
+      - contract: any_to_log_con
+        type: consumer
+    domains:
+      - type: vmm
+        provider: vmware
+        name: vmm_vds_mlg
+  - name: hrms_be_epg
+    bd: 192.168.22.0_24_bd
+    prefGroup: no
+    contracts:
+      - contract: app_to_db_con
+        type: consumer
+      - contract: web_to_app_con
+        type: provider
+      - contract: app_to_auth_con
+        type: consumer
+      - contract: any_to_log_con
+        type: consumer
+    domains:
+      - type: vmm
+        provider: vmware
+        name: vmm_vds_mlg
+  - name: db_epg
+    bd: 192.168.23.0_24_bd
+    prefGroup: no
+    contracts:
+      - contract: cache_to_db_con
+        type: provider
+      - contract: any_to_log_con
+        type: consumer
+    domains:
+      - type: vmm
+        provider: vmware
+        name: vmm_vds_mlg
+  - name: db_cache_epg
+    bd: 192.168.23.0_24_bd
+    prefGroup: no
+    contracts:
+      - contract: app_to_db_con
+        type: provider
+      - contract: cache_to_db_con
+        type: consumer
+      - contract: any_to_log_con
+        type: consumer
+    domains:
+      - type: vmm
+        provider: vmware
+        name: vmm_vds_mlg
+  - name: log_epg
+    bd: 192.168.22.0_24_bd
+    prefGroup: no
+    contracts:
+      - contract: any_to_log_con
+        type: provider
+    domains:
+      - type: vmm
+        provider: vmware
+        name: vmm_vds_mlg
+  - name: auth_epg
+    bd: 192.168.22.0_24_bd
+    prefGroup: no
+    contracts:
+      - contract: app_to_auth_con
+        type: provider
+      - contract: any_to_log_con
+        type: consumer
+    domains:
+      - type: vmm
+        provider: vmware
+        name: vmm_vds_mlg
+
+contracts:
+  - name: web_to_app_con
+    descr: Communication between web servers and application backend
+    scope: application-profile
+    subject: http_https
+    reverse_filter: yes
+    filters:
+      - http
+      - https
+  - name: app_to_db_con
+    descr: Communication between application backend and databases
+    scope: application-profile
+    subject: mongodb
+    reverse_filter: yes
+    filters:
+      - mongodb
+  - name: any_to_log_con
+    descr: Communication between application backend and databases
+    scope: application-profile
+    subject: log
+    reverse_filter: yes
+    filters:
+      - logstash
