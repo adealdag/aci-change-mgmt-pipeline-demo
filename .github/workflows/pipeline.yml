@@ -43,9 +43,6 @@ jobs:
   ansible-dry-run:
     runs-on: self-hosted
     container: adealdag/ansible:latest
-    defaults:
-      run:
-        working-directory: playbooks
 
     steps:
       - uses: actions/checkout@v2
@@ -58,12 +55,13 @@ jobs:
           echo $VAULT_KEY > vault.key
           ansible-playbook -i inventory.yaml --vault-password-file vault.key deploy.yaml --check
           rm vault.key
+        working-directory: playbooks
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: config-dump
-          path: dryrun_data.json
+          path: playbooks/dryrun_data.json
 
   pre-change-validation:
     # The type of runner that the job will run on
@@ -97,9 +95,6 @@ jobs:
     runs-on: self-hosted
     needs: [snapshot, pre-change-validation]
     container: adealdag/ansible:latest
-    defaults:
-      run:
-        working-directory: playbooks
 
     steps:
       - uses: actions/checkout@v2
@@ -112,3 +107,4 @@ jobs:
           echo $VAULT_KEY > vault.key
           ansible-playbook -i inventory.yaml --vault-password-file vault.key deploy.yaml
           rm vault.key
+        working-directory: playbooks
