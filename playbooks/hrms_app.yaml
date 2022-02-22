@@ -15,6 +15,7 @@
       validate_certs: "{{ aci_validate_certs }}"
       annotation: "orchestrator:ansible"
       state: present
+      output_path: dryrun_data.json
 
   vars_files:
     - hrms_app_variables.yaml
