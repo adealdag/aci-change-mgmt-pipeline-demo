@@ -66,6 +66,7 @@
         epg: "{{ item }}"
         domain: vmm_vds_mlg
         domain_type: vmm
+        vm_provider: vmware
         deploy_immediacy: immediate
         resolution_immediacy: pre-provision
         state: present
