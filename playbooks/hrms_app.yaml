@@ -65,8 +65,7 @@
         domain: "{{ item.1.name }}"
         domain_type: "{{ item.1.type }}"
         vm_provider: "{{ item.1.provider }}"
-        deploy_immediacy: immediate
-        resolution_immediacy: pre-provision
+
         state: present
       loop: "{{ epgs | subelements('domains') }}"
 
