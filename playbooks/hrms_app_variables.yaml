@@ -31,9 +31,15 @@ epgs:
       - contract: any_to_log_con
         type: consumer
     domains:
-      - type: vmm
-        provider: vmware
-        name: vmm_vds_mlg
+      - type: phys
+        name: prod_physdom
+    ports:
+      - interface: vpc_ucs-c1-1
+        type: vpc
+        mode: regular
+        pod: 1
+        leafs: 2103-2104
+        encap: 301
   - name: hrms_be_epg
     bd: 192.168.22.0_24_bd
     prefGroup: no
@@ -47,9 +53,15 @@ epgs:
       - contract: any_to_log_con
         type: consumer
     domains:
-      - type: vmm
-        provider: vmware
-        name: vmm_vds_mlg
+      - type: phys
+        name: prod_physdom
+    ports:
+      - interface: vpc_ucs-c1-1
+        type: vpc
+        mode: regular
+        pod: 1
+        leafs: 2103-2104
+        encap: 302
   - name: db_epg
     bd: 192.168.23.0_24_bd
     prefGroup: no
@@ -59,9 +71,15 @@ epgs:
       - contract: any_to_log_con
         type: consumer
     domains:
-      - type: vmm
-        provider: vmware
-        name: vmm_vds_mlg
+      - type: phys
+        name: prod_physdom
+    ports:
+      - interface: vpc_ucs-c1-1
+        type: vpc
+        mode: regular
+        pod: 1
+        leafs: 2103-2104
+        encap: 303
   - name: db_cache_epg
     bd: 192.168.23.0_24_bd
     prefGroup: no
@@ -73,9 +91,15 @@ epgs:
       - contract: any_to_log_con
         type: consumer
     domains:
-      - type: vmm
-        provider: vmware
-        name: vmm_vds_mlg
+      - type: phys
+        name: prod_physdom
+    ports:
+      - interface: vpc_ucs-c1-1
+        type: vpc
+        mode: regular
+        pod: 1
+        leafs: 2103-2104
+        encap: 304
   - name: log_epg
     bd: 192.168.22.0_24_bd
     prefGroup: no
@@ -83,9 +107,15 @@ epgs:
       - contract: any_to_log_con
         type: provider
     domains:
-      - type: vmm
-        provider: vmware
-        name: vmm_vds_mlg
+      - type: phys
+        name: prod_physdom
+    ports:
+      - interface: vpc_ucs-c1-1
+        type: vpc
+        mode: regular
+        pod: 1
+        leafs: 2103-2104
+        encap: 305
   - name: auth_epg
     bd: 192.168.22.0_24_bd
     prefGroup: no
@@ -95,9 +125,15 @@ epgs:
       - contract: any_to_log_con
         type: consumer
     domains:
-      - type: vmm
-        provider: vmware
-        name: vmm_vds_mlg
+      - type: phys
+        name: prod_physdom
+    ports:
+      - interface: vpc_ucs-c1-1
+        type: vpc
+        mode: regular
+        pod: 1
+        leafs: 2103-2104
+        encap: 306
 
 contracts:
   - name: web_to_app_con

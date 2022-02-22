@@ -64,10 +64,25 @@
         epg: "{{ item.0.name }}"
         domain: "{{ item.1.name }}"
         domain_type: "{{ item.1.type }}"
-        vm_provider: "{{ item.1.provider }}"
-
+        vm_provider: "{{ item.1.provider | default(omit) }}"
         state: present
       loop: "{{ epgs | subelements('domains') }}"
+
+    - name: Deploy Static Path binding
+      cisco.aci.aci_static_binding_to_epg:
+        <<: *aci_login
+        tenant: "{{ tenant_name }}"
+        ap: "{{ app_name }}"
+        epg: "{{ item.0.name }}"
+        encap_id: "{{ item.1.encap }}"
+        deploy_immediacy: lazy
+        interface_mode: "{{ item.1.mode }}"
+        interface_type: "{{ item.1.type }}"
+        pod_id: "{{ item.1.pod }}"
+        leafs: "{{ item.1.leafs }}"
+        interface: "{{ item.1.interface }}"
+        state: present
+      loop: "{{ epgs | subelements('ports') }}"
 
     # Contracts Definition
 
