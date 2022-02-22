@@ -53,7 +53,7 @@ jobs:
         run: |
           ansible --version
           echo $VAULT_KEY > vault.key
-          ansible-playbook -i inventory.yaml --vault-password-file vault.key deploy.yaml --check
+          ansible-playbook -i inventory.yaml --vault-password-file vault.key playbooks/deploy.yaml --check
           rm vault.key
 
       - name: Upload artifact
@@ -104,5 +104,5 @@ jobs:
         run: |
           ansible --version
           echo $VAULT_KEY > vault.key
-          ansible-playbook -i inventory.yaml --vault-password-file vault.key deploy.yaml
+          ansible-playbook -i inventory.yaml --vault-password-file vault.key playbooks/deploy.yaml
           rm vault.key
