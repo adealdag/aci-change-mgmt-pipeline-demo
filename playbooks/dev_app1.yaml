@@ -1,7 +1,7 @@
 # ACI playbook - Create Development App Demo
 
 - name: Create Development App Demo
-  hosts: "*apic1"
+  hosts: apic
   connection: local
   gather_facts: no
 
