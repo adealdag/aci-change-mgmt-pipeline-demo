@@ -126,6 +126,67 @@
       loop:
         - mongodb
 
+    # Filters
+    - name: Create HTTP Filter
+      cisco.aci.aci_filter:
+        <<: *aci_login
+        tenant: development_tn
+        filter: http
+        state: present
+        output_path: dryrun_data.json
+
+    - name: Create HTTP Filter Entry
+      cisco.aci.aci_filter_entry:
+        <<: *aci_login
+        tenant: development_tn
+        filter: http
+        entry: http
+        ether_type: ip
+        ip_protocol: tcp
+        dst_port: 80
+        state: present
+        output_path: dryrun_data.json
+
+    - name: Create HTTPS Filter
+      cisco.aci.aci_filter:
+        <<: *aci_login
+        tenant: development_tn
+        filter: https
+        state: present
+        output_path: dryrun_data.json
+
+    - name: Create HTTPS Filter Entry
+      cisco.aci.aci_filter_entry:
+        <<: *aci_login
+        tenant: development_tn
+        filter: https
+        entry: https
+        ether_type: ip
+        ip_protocol: tcp
+        dst_port: 443
+        state: present
+        output_path: dryrun_data.json
+
+    - name: Create mongodb Filter
+      cisco.aci.aci_filter:
+        <<: *aci_login
+        tenant: development_tn
+        filter: mongodb
+        state: present
+        output_path: dryrun_data.json
+
+    - name: Create HTTPS Filter Entry
+      cisco.aci.aci_filter_entry:
+        <<: *aci_login
+        tenant: development_tn
+        filter: mongodb
+        entry: mongodb
+        ether_type: ip
+        ip_protocol: tcp
+        dst_port: 27017
+        state: present
+        output_path: dryrun_data.json
+
     # Apply contracts
 
     - name: Add contracts for app demo
