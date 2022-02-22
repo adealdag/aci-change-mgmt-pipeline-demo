@@ -57,6 +57,24 @@
         state: present
         output_path: dryrun_data.json
 
+    # VMM Domain association
+    - name: Add a new physical domain to EPG binding
+      cisco.aci.aci_epg_to_domain:
+        <<: *aci_login
+        tenant: development_tn
+        ap: app_demo_ap
+        epg: "{{ item }}"
+        domain: vmm_vds_mlg
+        domain_type: vmm
+        deploy_immediacy: immediate
+        resolution_immediacy: pre-provision
+        state: present
+        output_path: dryrun_data.json
+      loop:
+        - web_epg
+        - app_epg
+        - db_epg
+
     # Contracts
 
     - name: Add contract for web_to_app
