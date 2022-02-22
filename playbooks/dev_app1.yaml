@@ -1,19 +1,19 @@
 # ACI playbook - Create Development App Demo
 
 - name: Create Development App Demo
-  hosts: '*apic1'
+  hosts: "*apic1"
   connection: local
   gather_facts: no
-  
+
   vars:
     aci_login: &aci_login
-        host: "{{ ansible_host }}"
-        username: "{{ aci_username }}"
-        password: "{{ aci_password | default(omit) }}"
-        private_key: "{{ aci_private_key | default(omit) }}"
-        certificate_name: "{{ aci_certificate_name | default(omit) }}"
-        validate_certs: "{{ aci_validate_certs }}"
-        annotation: "orchestrator:ansible"
+      host: "{{ ansible_host }}"
+      username: "{{ aci_username }}"
+      password: "{{ aci_password | default(omit) }}"
+      private_key: "{{ aci_private_key | default(omit) }}"
+      certificate_name: "{{ aci_certificate_name | default(omit) }}"
+      validate_certs: "{{ aci_validate_certs }}"
+      annotation: "orchestrator:ansible"
 
   tasks:
     - name: Add App Demo Application Profile
@@ -22,6 +22,7 @@
         tenant: development_tn
         ap: app_demo_ap
         state: present
+        output_path: dryrun_data.json
 
     - name: Add app_demo/web EPG
       cisco.aci.aci_epg:
@@ -32,6 +33,7 @@
         bd: 192.168.200.0_24_bd
         preferred_group: no
         state: present
+        output_path: dryrun_data.json
 
     - name: Add app_demo/app EPG
       cisco.aci.aci_epg:
@@ -42,6 +44,7 @@
         bd: 192.168.200.0_24_bd
         preferred_group: no
         state: present
+        output_path: dryrun_data.json
 
     - name: Add app_demo/db EPG
       cisco.aci.aci_epg:
@@ -52,6 +55,7 @@
         bd: 192.168.201.0_24_bd
         preferred_group: no
         state: present
+        output_path: dryrun_data.json
 
     # Contracts
 
@@ -63,6 +67,7 @@
         description: Communication between web servers and application backend
         scope: application-profile
         state: present
+        output_path: dryrun_data.json
 
     - name: Add contract subject for web_to_app
       cisco.aci.aci_contract_subject:
@@ -72,6 +77,7 @@
         subject: http_https
         reverse_filter: yes
         state: present
+        output_path: dryrun_data.json
 
     - name: Bind filters to contract subject for web_to_app
       cisco.aci.aci_contract_subject_to_filter:
@@ -82,6 +88,7 @@
         filter: "{{ item }}"
         log: log
         state: present
+        output_path: dryrun_data.json
       loop:
         - http
         - https
@@ -94,6 +101,7 @@
         description: Communication between application backend and databases
         scope: application-profile
         state: present
+        output_path: dryrun_data.json
 
     - name: Add contract subject for app_to_db
       cisco.aci.aci_contract_subject:
@@ -103,6 +111,7 @@
         subject: mongodb
         reverse_filter: yes
         state: present
+        output_path: dryrun_data.json
 
     - name: Bind filters to contract subject for app_to_db
       cisco.aci.aci_contract_subject_to_filter:
@@ -113,9 +122,10 @@
         filter: "{{ item }}"
         log: log
         state: present
+        output_path: dryrun_data.json
       loop:
         - mongodb
-  
+
     # Apply contracts
 
     - name: Add contracts for app demo
@@ -127,13 +137,19 @@
         contract: "{{ item.contract }}"
         contract_type: "{{ item.type }}"
         state: present
+        output_path: dryrun_data.json
       loop:
-        - { epg: 'web_epg', contract: 'shared_core_l3out_con', type: 'consumer' }
-        - { epg: 'web_epg', contract: 'shared_core_l3out_con', type: 'provider' }
-        - { epg: 'web_epg', contract: 'web_to_app_con', type: 'consumer' }
-        - { epg: 'app_epg', contract: 'web_to_app_con', type: 'provider' }
-        - { epg: 'app_epg', contract: 'app_to_db_con', type: 'consumer' }
-        - { epg: 'db_epg', contract: 'app_to_db_con', type: 'provider' }
-
-
-      
+        - {
+            epg: "web_epg",
+            contract: "shared_core_l3out_con",
+            type: "consumer",
+          }
+        - {
+            epg: "web_epg",
+            contract: "shared_core_l3out_con",
+            type: "provider",
+          }
+        - { epg: "web_epg", contract: "web_to_app_con", type: "consumer" }
+        - { epg: "app_epg", contract: "web_to_app_con", type: "provider" }
+        - { epg: "app_epg", contract: "app_to_db_con", type: "consumer" }
+        - { epg: "db_epg", contract: "app_to_db_con", type: "provider" }
