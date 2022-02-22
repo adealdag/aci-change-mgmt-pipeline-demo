@@ -1,7 +1,7 @@
 # ACI playbook - Create Development Tenant
 
 - name: Create Development Tenant
-  hosts: "*apic1"
+  hosts: apic
   connection: local
   gather_facts: no
 
