@@ -14,7 +14,7 @@
       certificate_name: "{{ aci_certificate_name | default(omit) }}"
       validate_certs: "{{ aci_validate_certs }}"
       annotation: "orchestrator:ansible"
-    shared_l3out_name: L3OUT_CORE
+    shared_l3out_name: shared_l3out
 
   tasks:
     - name: Add Development Tenant
