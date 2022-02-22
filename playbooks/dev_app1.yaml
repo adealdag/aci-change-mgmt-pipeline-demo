@@ -200,16 +200,8 @@
         state: present
         output_path: dryrun_data.json
       loop:
-        - {
-            epg: "web_epg",
-            contract: "shared_core_l3out_con",
-            type: "consumer",
-          }
-        - {
-            epg: "web_epg",
-            contract: "shared_core_l3out_con",
-            type: "provider",
-          }
+        - { epg: "web_epg", contract: "external_to_web_con", type: "consumer" }
+        - { epg: "web_epg", contract: "external_to_web_con", type: "provider" }
         - { epg: "web_epg", contract: "web_to_app_con", type: "consumer" }
         - { epg: "app_epg", contract: "web_to_app_con", type: "provider" }
         - { epg: "app_epg", contract: "app_to_db_con", type: "consumer" }
