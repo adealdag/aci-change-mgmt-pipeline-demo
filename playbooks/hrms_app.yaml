@@ -21,6 +21,12 @@
     - hrms_app_variables.yaml
 
   tasks:
+    - name: Add Tenant
+      cisco.aci.aci_tenant:
+        <<: *aci_login
+        tenant: "{{ tenant_name }}"
+        state: present
+
     - name: Add Application Profile
       cisco.aci.aci_ap:
         <<: *aci_login
@@ -39,7 +45,7 @@
         state: present
       loop: "{{ epgs }}"
 
-    - name: Add contracts for app demo
+    - name: Add contracts
       cisco.aci.aci_epg_to_contract:
         <<: *aci_login
         tenant: "{{ tenant_name }}"
@@ -49,6 +55,20 @@
         contract_type: "{{ item.1.type }}"
         state: present
       loop: "{{ epgs | subelements('contracts') }}"
+
+    - name: Add domain binding
+      cisco.aci.aci_epg_to_domain:
+        <<: *aci_login
+        tenant: "{{ tenant_name }}"
+        ap: "{{ app_name }}"
+        epg: "{{ item.0.name }}"
+        domain: "{{ item.1.name }}"
+        domain_type: "{{ item.1.type }}"
+        vm_provider: "{{ item.1.provider }}"
+        deploy_immediacy: immediate
+        resolution_immediacy: pre-provision
+        state: present
+      loop: "{{ epgs | subelements('domains') }}"
 
     # Contracts Definition
 
