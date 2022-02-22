@@ -88,16 +88,7 @@
         bd: 192.168.201.0_24_bd
         gateway: 192.168.201.1
         mask: 24
-        scope: [public, shared]
-        state: present
-        output_path: dryrun_data.json
-
-    - name: Bind 192.168.201.0/24 bridge domain to Core L3Out
-      cisco.aci.aci_bd_to_l3out:
-        <<: *aci_login
-        tenant: development_tn
-        bd: 192.168.201.0_24_bd
-        l3out: "{{ shared_l3out_name }}"
+        scope: [private]
         state: present
         output_path: dryrun_data.json
 
@@ -120,15 +111,6 @@
         bd: 192.168.202.0_24_bd
         gateway: 192.168.202.1
         mask: 24
-        scope: [public, shared]
-        state: present
-        output_path: dryrun_data.json
-
-    - name: Bind 192.168.202.0/24 bridge domain to Core L3Out
-      cisco.aci.aci_bd_to_l3out:
-        <<: *aci_login
-        tenant: development_tn
-        bd: 192.168.202.0_24_bd
-        l3out: "{{ shared_l3out_name }}"
+        scope: [private]
         state: present
         output_path: dryrun_data.json
