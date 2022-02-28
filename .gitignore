@@ -1,2 +1,4 @@
 *.retry
 *.key
+.vscode/*
+*.pyc
