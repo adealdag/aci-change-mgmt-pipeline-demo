@@ -67,7 +67,7 @@ else:
 
 # Get base epoch information
 url = nd_url + \
-    "/sedgeapi/v1/cisco-nir/api/api/telemetry/v2/events/insightsGroup/{}/fabric/{}/epochs?$size=1&$status=FINISHED".format(
+    "/sedgeapi/v1/cisco-nir/api/api/telemetry/v2/events/insightsGroup/{}/fabric/{}/epochs?$size=1&$status=FINISHED&$epochType=ONLINE".format(
         args.igname, args.site)
 
 response = session.get(url, headers={})
