@@ -14,7 +14,7 @@
 - name: Deploy prod tenant, networking and contracts
   import_playbook: prod_playbook.yaml
   
-# - name: Deploy prod hrms app
-#   import_playbook: nonpci_hrms_app.yaml
+- name: Deploy prod hrms app
+  import_playbook: nonpci_hrms_app.yaml
 
 
