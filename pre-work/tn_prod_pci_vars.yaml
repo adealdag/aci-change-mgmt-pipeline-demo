@@ -1,0 +1,147 @@
+tenant_name: prod_pci
+vrf_name: pci_vrf
+l3out_name: shared_l3out
+
+bridge_domains:
+  - name: 192.168.11.0_24_bd
+    mode: L3
+    gateway: 192.168.11.1/24
+    scope: [public, shared]
+  - name: 192.168.12.0_24_bd
+    mode: L3
+    gateway: 192.168.12.1/24
+    scope: [private]
+  - name: 192.168.13.0_24_bd
+    mode: L3
+    gateway: 192.168.13.1/24
+    scope: [private]
+
+app_name: banking_app
+epgs:
+  - name: web_epg
+    bd: 192.168.11.0_24_bd
+    prefGroup: no
+    contracts:
+      - contract: external_to_web_con
+        type: consumer
+      - contract: web_to_app_con
+        type: consumer
+      - contract: any_to_log_con
+        type: consumer
+    domains:
+      - type: vmm
+        provider: vmware
+        domain: vmm_vds_mlg
+  - name: app_epg
+    bd: 192.168.12.0_24_bd
+    prefGroup: no
+    contracts:
+      - contract: app_to_db_con
+        type: consumer
+      - contract: web_to_app_con
+        type: provider
+      - contract: app_to_auth_con
+        type: consumer
+      - contract: any_to_log_con
+        type: consumer
+    domains:
+      - type: vmm
+        provider: vmware
+        domain: vmm_vds_mlg
+  - name: db_epg
+    bd: 192.168.13.0_24_bd
+    prefGroup: no
+    contracts:
+      - contract: cache_to_db_con
+        type: provider
+      - contract: any_to_log_con
+        type: consumer
+    domains:
+      - type: vmm
+        provider: vmware
+        domain: vmm_vds_mlg
+  - name: db_cache_epg
+    bd: 192.168.13.0_24_bd
+    prefGroup: no
+    contracts:
+      - contract: app_to_db_con
+        type: provider
+      - contract: cache_to_db_con
+        type: consumer
+      - contract: any_to_log_con
+        type: consumer
+    domains:
+      - type: vmm
+        provider: vmware
+        domain: vmm_vds_mlg
+  - name: log_epg
+    bd: 192.168.12.0_24_bd
+    prefGroup: no
+    contracts:
+      - contract: any_to_log_con
+        type: provider
+    domains:
+      - type: vmm
+        provider: vmware
+        domain: vmm_vds_mlg
+  - name: auth_epg
+    bd: 192.168.12.0_24_bd
+    prefGroup: no
+    contracts:
+      - contract: app_to_auth_con
+        type: provider
+      - contract: any_to_log_con
+        type: consumer
+    domains:
+      - type: vmm
+        provider: vmware
+        domain: vmm_vds_mlg
+
+contracts:
+  - name: web_to_app_con
+    descr: Communication between web servers and application backend
+    scope: application-profile
+    subject: https_icmp
+    reverse_filter: yes
+    filters:
+      - https
+      - icmp
+  - name: app_to_db_con
+    descr: Communication between application backend and databases
+    scope: application-profile
+    subject: mariadb_icmp
+    reverse_filter: yes
+    filters:
+      - mariadb
+      - icmp
+  - name: any_to_log_con
+    descr: Communication between any component and log
+    scope: application-profile
+    subject: https
+    reverse_filter: yes
+    filters:
+      - https
+  - name: any_to_dns_con
+    descr: Communication between any component and dns
+    scope: application-profile
+    subject: dns_icmp
+    reverse_filter: yes
+    filters:
+      - dns
+      - icmp
+  - name: app_to_auth_con
+    descr: Communication between application backend and authentication services
+    scope: application-profile
+    subject: https_icmp
+    reverse_filter: yes
+    filters:
+      - https
+      - icmp
+  - name: cache_to_db_con
+    descr: Communication between application backend and database cache
+    scope: application-profile
+    subject: mariadb_icmp
+    reverse_filter: yes
+    filters:
+      - mariadb
+      - icmp
