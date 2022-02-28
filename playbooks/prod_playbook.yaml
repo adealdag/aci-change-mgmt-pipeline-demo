@@ -18,7 +18,7 @@
       output_path: dryrun_data.json
 
   vars_files:
-   - vars_files/tn_prod_vars.yaml
+   - ./tn_prod_vars.yaml
 
   tasks:
     - name: Add Tenant
