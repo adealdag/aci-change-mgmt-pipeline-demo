@@ -30,7 +30,7 @@ epgs:
         type: consumer
     domains:
       - type: phys
-        name: prod_physdom
+        domain: prod_physdom
     ports:
       - interface: vpc_ucs-c1-1
         type: vpc
@@ -52,7 +52,7 @@ epgs:
         type: consumer
     domains:
       - type: phys
-        name: prod_physdom
+        domain: prod_physdom
     ports:
       - interface: vpc_ucs-c1-1
         type: vpc
@@ -70,7 +70,7 @@ epgs:
         type: consumer
     domains:
       - type: phys
-        name: prod_physdom
+        domain: prod_physdom
     ports:
       - interface: vpc_ucs-c1-1
         type: vpc
@@ -90,7 +90,7 @@ epgs:
         type: consumer
     domains:
       - type: phys
-        name: prod_physdom
+        domain: prod_physdom
     ports:
       - interface: vpc_ucs-c1-1
         type: vpc
@@ -106,7 +106,7 @@ epgs:
         type: provider
     domains:
       - type: phys
-        name: prod_physdom
+        domain: prod_physdom
     ports:
       - interface: vpc_ucs-c1-1
         type: vpc
@@ -124,7 +124,7 @@ epgs:
         type: consumer
     domains:
       - type: phys
-        name: prod_physdom
+        domain: prod_physdom
     ports:
       - interface: vpc_ucs-c1-1
         type: vpc

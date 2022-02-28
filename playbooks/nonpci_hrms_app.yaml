@@ -1,6 +1,6 @@
-# ACI playbook - Create HRMS App Demo
+# ACI playbook - Create HRMS App Profile
 
-- name: Create HRMS App
+- name: Create HRMS App Profile (prod)
   hosts: apic
   connection: local
   gather_facts: no
@@ -18,22 +18,14 @@
       output_path: dryrun_data.json
 
   vars_files:
-    - hrms_app_variables.yaml
+   - vars_files/nonpci_hrms_app.yaml
 
   tasks:
-    - name: Add Tenant
-      cisco.aci.aci_tenant:
-        <<: *aci_login
-        tenant: "{{ tenant_name }}"
-        state: present
-
     - name: Add Application Profile
       cisco.aci.aci_ap:
         <<: *aci_login
         tenant: "{{ tenant_name }}"
         ap: "{{ app_name }}"
-        description: Super important app
-        state: present
 
     - name: Add EPG
       cisco.aci.aci_epg:
@@ -43,7 +35,6 @@
         epg: "{{ item.name }}"
         bd: "{{ item.bd }}"
         preferred_group: "{{ item.prefGroup }}"
-        state: present
       loop: "{{ epgs }}"
 
     - name: Add contracts
@@ -54,8 +45,8 @@
         epg: "{{ item.0.name }}"
         contract: "{{ item.1.contract }}"
         contract_type: "{{ item.1.type }}"
-        state: present
-      loop: "{{ epgs | subelements('contracts') }}"
+
+      loop: "{{ epgs | subelements('contracts', skip_missing=True) }}"
 
     - name: Add domain binding
       cisco.aci.aci_epg_to_domain:
@@ -63,11 +54,10 @@
         tenant: "{{ tenant_name }}"
         ap: "{{ app_name }}"
         epg: "{{ item.0.name }}"
-        domain: "{{ item.1.name }}"
+        domain: "{{ item.1.domain }}"
         domain_type: "{{ item.1.type }}"
         vm_provider: "{{ item.1.provider | default(omit) }}"
-        state: present
-      loop: "{{ epgs | subelements('domains') }}"
+      loop: "{{ epgs | subelements('domains', skip_missing=True) }}"
 
     - name: Deploy Static Path binding
       cisco.aci.aci_static_binding_to_epg:
@@ -82,38 +72,5 @@
         pod_id: "{{ item.1.pod }}"
         leafs: "{{ item.1.leafs }}"
         interface: "{{ item.1.interface }}"
-        state: present
-      loop: "{{ epgs | subelements('ports') }}"
+      loop: "{{ epgs | subelements('ports', skip_missing=True) }}"
 
-    # Contracts Definition
-
-    - name: Add contracts
-      cisco.aci.aci_contract:
-        <<: *aci_login
-        tenant: "{{ tenant_name }}"
-        contract: "{{ item.name }}"
-        description: "{{ item.descr }}"
-        scope: "{{ item.scope }}"
-        state: present
-      loop: "{{ contracts }}"
-
-    - name: Add contract subjects
-      cisco.aci.aci_contract_subject:
-        <<: *aci_login
-        tenant: "{{ tenant_name }}"
-        contract: "{{ item.name }}"
-        subject: "{{ item.subject }}"
-        reverse_filter: "{{ item.reverse_filter }}"
-        state: present
-      loop: "{{ contracts }}"
-
-    - name: Bind filters to contract subjects
-      cisco.aci.aci_contract_subject_to_filter:
-        <<: *aci_login
-        tenant: "{{ tenant_name }}"
-        contract: "{{ item.0.name }}"
-        subject: "{{ item.0.subject }}"
-        filter: "{{ item.1 }}"
-        log: log
-        state: present
-      loop: "{{ contracts | subelements('filters') }}"
