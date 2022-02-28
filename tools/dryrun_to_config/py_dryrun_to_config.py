@@ -1,5 +1,6 @@
 import sys
 import os
+import traceback
 import argparse
 import logging
 import aci_config_tree
@@ -27,4 +28,5 @@ try:
     aci_config_tree.config_construct_tree(args.input, args.output)
 except:
     logging.error("Exception triggered")
+    logging.debug(traceback.format_exc())
     sys.exit(-1)
