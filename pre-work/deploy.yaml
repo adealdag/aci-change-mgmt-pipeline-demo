@@ -1,0 +1,16 @@
+# Prepare Infrastructure for demo
+---
+
+# Production pci tenant
+
+- name: Deploy prod_pci tenant, networking and contracts
+  import_playbook: prod_pci_playbook.yaml
+  
+- name: Deploy prod_pci banking app
+  import_playbook: pci_banking_app.yaml
+
+# Production (non-pci) tenant
+
+- name: Deploy prod tenant, networking and contracts
+  import_playbook: prod_playbook.yaml
+
