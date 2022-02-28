@@ -17,6 +17,7 @@ on:
 env:
   IG_NAME: dc_spain
   SITE_NAME: MLG01
+  PYTHONWARNINGS: "ignore:Unverified HTTPS request"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
