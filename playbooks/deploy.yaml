@@ -1,4 +1,10 @@
-# Deploy Full Infrastructure - Include here all playbooks that want to be deployed
+# Deploy Non-PCI Infrastructure - Include here all playbooks that want to be deployed
 ---
-- import_playbook: dev_tenant.yaml
-- import_playbook: dev_app1.yaml
+
+# Production (non-pci) tenant
+
+- name: Deploy prod tenant, networking and contracts
+  import_playbook: prod_playbook.yaml
+  
+- name: Deploy prod hrms app
+  import_playbook: nonpci_hrms_app.yaml

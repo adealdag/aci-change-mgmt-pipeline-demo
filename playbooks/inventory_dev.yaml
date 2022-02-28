@@ -2,8 +2,8 @@ dcmdr:
   children:
     apic:
       hosts:
-        apic1-mlg1.cisco.com:
-          ansible_host: apic1-mlg1.cisco.com
+        apic-sim-mdr1.cisco.com:
+          ansible_host: apic-sim-mdr1.cisco.com
           aci_username: "ansible"
           aci_password: !vault |
             $ANSIBLE_VAULT;1.1;AES256
